@@ -1,15 +1,21 @@
 import "./App.css"
+import { Pagination } from "./features/pagination/Pagination"
 
 function App() {
   return (
-    <div id="app-container" className="app-container">
-      <input type="text" id="search-input" className="search-input" size={40} />
+    <div className="app-container" id="app-container">
+      <input
+        type="search"
+        id="search-input"
+        className="search-input"
+        size={40}
+      />
 
       <div className="posts_container" id="posts_container">
         {/* JS inserts posts here */}
         {/* On post click open post modal */}
       </div>
-      <div className="post-navigation-container" id="post-navigation-container">
+      {/* <div className="post-navigation-container" id="post-navigation-container">
         <button className="arrow" id="left-arrow" disabled>
           {"<<<"}
         </button>
@@ -19,7 +25,8 @@ function App() {
         <button className="arrow" id="right-arrow">
           {">>>"}
         </button>
-      </div>
+      </div> */}
+      <Pagination />
     </div>
   )
 }

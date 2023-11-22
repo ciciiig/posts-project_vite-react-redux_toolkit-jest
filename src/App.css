@@ -49,7 +49,7 @@
     overflow: hidden;
 }
 
-.post-navigation-container {
+/* .post-navigation-container {
     text-align: center;
 }
 
@@ -71,7 +71,7 @@
 .arrow:disabled {
     color: rgba(150, 150, 150, 0.5);
     pointer-events: none;
-}
+} */
 
 .modal-back {
     position: fixed;

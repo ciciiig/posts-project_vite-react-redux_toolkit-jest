@@ -1,0 +1,25 @@
+.pagination-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.page-number {
+    margin: 0 10px;
+    pointer-events: none;
+}
+
+.arrow {
+    background: none;
+    color: inherit;
+    border: none;
+    padding: 0;
+    font: inherit;
+    cursor: pointer;
+    outline: inherit;
+}
+
+.arrow:disabled {
+    color: rgba(150, 150, 150, 0.5);
+    pointer-events: none;
+}
