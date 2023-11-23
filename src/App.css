@@ -13,7 +13,7 @@
     padding: 15px;
 }
 
-.posts_container {
+/* .posts_container {
     display: flex;
     justify-content: start;
     align-content: flex-start;
@@ -22,9 +22,9 @@
     height: 80%;
     margin: 10px 0;
     padding: 15px;
-}
+} */
 
-.post {
+/* .post {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -39,15 +39,14 @@
 .post:hover {
     transform: scale(1.02);
     cursor: pointer;
-}
+} */
 
-.post-body {
-    /* line-clamp needs all 4 lines bellow to show only 3 lines */
+/* .post-body {
     display: -webkit-box;
     -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
     overflow: hidden;
-}
+} */
 
 /* .post-navigation-container {
     text-align: center;
