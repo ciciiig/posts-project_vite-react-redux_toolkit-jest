@@ -8,13 +8,38 @@ import {
   setIsOpen,
   setOriginalPost,
 } from "../singlePostWindow/singlePostWindowSlice"
+import { getCurrentPostsState } from "../../utils/getCurrentPostsState"
+import { selectPagination, setMaxPages } from "../pagination/paginationSlice"
+import { useEffect } from "react"
+import { setCurrentPosts } from "./postsSlice"
 
 export const PostsList = () => {
   const posts = useAppSelector(selectPosts)
-
+  const pagination = useAppSelector(selectPagination)
   const dispatch = useAppDispatch()
 
-  const renderedPosts = posts.map((post) => (
+  useEffect(() => {
+    dispatch(
+      setMaxPages(
+        getCurrentPostsState(
+          posts.allPosts,
+          pagination.currentPage,
+          posts.searchValue,
+        ).maxPages,
+      ),
+    )
+    dispatch(
+      setCurrentPosts(
+        getCurrentPostsState(
+          posts.allPosts,
+          pagination.currentPage,
+          posts.searchValue,
+        ).currentPosts,
+      ),
+    )
+  }, [dispatch, posts.allPosts, pagination.currentPage, posts.searchValue])
+
+  const renderedPosts = posts.currentPosts?.map((post) => (
     <div className="post" id={`post-card-${post.id}`} key={crypto.randomUUID()}>
       <div>{post.id}</div>
       <div>{shortenText(post.title)}</div>
@@ -28,7 +53,7 @@ export const PostsList = () => {
 
     if (closestPostCard) {
       const postId = closestPostCard.id.split("-")[2]
-      const clickedPost = posts.find(
+      const clickedPost = posts.allPosts.find(
         (currentPost) => currentPost.id === +postId,
       )
 

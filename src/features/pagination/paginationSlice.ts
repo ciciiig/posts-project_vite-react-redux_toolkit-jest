@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit"
+import { PayloadAction, createSlice } from "@reduxjs/toolkit"
 import { RootState } from "../../app/store"
 
 export interface PaginationState {
@@ -12,7 +12,7 @@ export interface PaginationState {
 
 const initialState: PaginationState = {
   currentPage: 1,
-  maxPages: 3,
+  maxPages: 10,
   postNavigation: {
     isPrevBtnDisabled: true,
     isNextBtnDisabled: false,
@@ -41,10 +41,14 @@ export const paginationSlice = createSlice({
         state.postNavigation.isPrevBtnDisabled = false
       }
     },
+    setMaxPages(state, action: PayloadAction<number>) {
+      state.maxPages = action.payload
+    },
   },
 })
 
-export const { setPreviousPage, setNextPage } = paginationSlice.actions
+export const { setPreviousPage, setNextPage, setMaxPages } =
+  paginationSlice.actions
 
 export const selectPagination = (state: RootState) => state.pagination
 

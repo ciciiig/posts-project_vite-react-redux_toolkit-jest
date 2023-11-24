@@ -11,7 +11,7 @@ export const SinglePostWindow = () => {
   const dispatch = useAppDispatch()
   const modalWindowRef = useRef<HTMLDivElement>(null)
 
-  const post = posts.find(
+  const post = posts.allPosts.find(
     (currentPost) => currentPost.id === singlePostWindow.clickedPostId,
   )
 
