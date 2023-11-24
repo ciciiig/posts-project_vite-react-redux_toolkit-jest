@@ -1,6 +1,7 @@
 import "./App.css"
 import { Pagination } from "./features/pagination/Pagination"
 import { PostsList } from "./features/posts/PostsList"
+import { SinglePostWindow } from "./features/singlePostWindow/SinglePostWindow"
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
       />
 
       <PostsList />
+      <SinglePostWindow />
       <Pagination />
     </div>
   )
