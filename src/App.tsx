@@ -1,7 +1,7 @@
 import "./App.css"
 import { Input } from "./app/components/Input"
 import { Pagination } from "./features/pagination/Pagination"
-import { PostsList } from "./features/posts/PostsList"
+import { PostsList } from "./features/posts/postsComponents/postsList/PostsList"
 import { SinglePostWindow } from "./features/singlePostWindow/SinglePostWindow"
 
 function App() {

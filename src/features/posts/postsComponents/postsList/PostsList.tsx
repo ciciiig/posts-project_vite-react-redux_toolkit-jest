@@ -1,17 +1,20 @@
 import "./PostsList.css"
-import { useAppDispatch, useAppSelector } from "../../app/hooks"
-import { selectPosts } from "./postsSlice"
-import { shortenText } from "../../utils/shortenText"
+import { useAppDispatch, useAppSelector } from "../../../../app/hooks"
+import { selectPosts } from "../../postsSlice"
 import {
   setClickedPostId,
   setEditedPost,
   setIsOpen,
   setOriginalPost,
-} from "../singlePostWindow/singlePostWindowSlice"
-import { getCurrentPostsState } from "../../utils/getCurrentPostsState"
-import { selectPagination, setMaxPages } from "../pagination/paginationSlice"
+} from "../../../singlePostWindow/singlePostWindowSlice"
+import { getCurrentPostsState } from "../../../../utils/getCurrentPostsState"
+import {
+  selectPagination,
+  setMaxPages,
+} from "../../../pagination/paginationSlice"
 import { useEffect } from "react"
-import { setCurrentPosts } from "./postsSlice"
+import { setCurrentPosts } from "../../postsSlice"
+import { CreatePostCard } from "../createPostCard/CreatePostCard"
 
 export const PostsList = () => {
   const posts = useAppSelector(selectPosts)
@@ -19,33 +22,14 @@ export const PostsList = () => {
   const dispatch = useAppDispatch()
 
   useEffect(() => {
-    dispatch(
-      setMaxPages(
-        getCurrentPostsState(
-          posts.allPosts,
-          pagination.currentPage,
-          posts.searchValue,
-        ).maxPages,
-      ),
+    const currentPosts = getCurrentPostsState(
+      posts.allPosts,
+      pagination.currentPage,
+      posts.searchValue,
     )
-    dispatch(
-      setCurrentPosts(
-        getCurrentPostsState(
-          posts.allPosts,
-          pagination.currentPage,
-          posts.searchValue,
-        ).currentPosts,
-      ),
-    )
+    dispatch(setMaxPages(currentPosts.maxPages))
+    dispatch(setCurrentPosts(currentPosts.currentPosts))
   }, [dispatch, posts.allPosts, pagination.currentPage, posts.searchValue])
-
-  const renderedPosts = posts.currentPosts?.map((post) => (
-    <div className="post" id={`post-card-${post.id}`} key={crypto.randomUUID()}>
-      <div>{post.id}</div>
-      <div>{shortenText(post.title)}</div>
-      <div className="post-body">{post.body}</div>
-    </div>
-  ))
 
   const handleClickPosts = (clickEvent: React.MouseEvent<HTMLDivElement>) => {
     const target = clickEvent.target as HTMLElement
@@ -72,7 +56,7 @@ export const PostsList = () => {
       id="posts_container"
       onClick={handleClickPosts}
     >
-      {renderedPosts}
+      <CreatePostCard />
     </div>
   )
 }

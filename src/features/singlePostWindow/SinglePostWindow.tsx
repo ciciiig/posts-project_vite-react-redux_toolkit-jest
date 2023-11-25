@@ -27,16 +27,19 @@ export const SinglePostWindow = () => {
         (event.target as HTMLElement).id ===
         "modal-window-acton-buttons-container__confirm-button"
       ) {
-        // onConfirm()
+        onConfirm()
       }
     }
-
     document.addEventListener("mouseup", handleClickSinglePostWindow)
 
     return () => {
       document.removeEventListener("mouseup", handleClickSinglePostWindow)
     }
   }, [dispatch])
+
+  function onConfirm() {
+    console.log("test")
+  }
 
   if (post && singlePostWindow.isOpen) {
     return (
