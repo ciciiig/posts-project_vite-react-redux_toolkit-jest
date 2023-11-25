@@ -1,7 +1,7 @@
 import "./SinglePostWindow.css"
 import { capitalizeFirstLetter } from "../../utils/capitalizeFirstLetter"
 import { useAppDispatch, useAppSelector } from "../../app/hooks"
-import { selectPosts } from "../posts/postsSlice"
+import { selectPosts, updatePostBody } from "../posts/postsSlice"
 import { selectSinglePostWindow, setIsOpen } from "./singlePostWindowSlice"
 import { useEffect, useRef } from "react"
 
@@ -9,13 +9,45 @@ export const SinglePostWindow = () => {
   const posts = useAppSelector(selectPosts)
   const singlePostWindow = useAppSelector(selectSinglePostWindow)
   const dispatch = useAppDispatch()
-  const modalWindowRef = useRef<HTMLDivElement>(null)
+  const textareaEditedValue = useRef<HTMLTextAreaElement>(null)
 
   const post = posts.allPosts.find(
     (currentPost) => currentPost.id === singlePostWindow.clickedPostId,
   )
 
   useEffect(() => {
+    function onConfirm() {
+      // const updatePostBody = (body) => {
+      //   appState.posts.forEach((post) => {
+      //     if (post.id === singlePostWindow.clickedPostId.id) {
+      //       post.body = body
+      //     }
+      //   })
+      // }
+
+      if (textareaEditedValue.current && singlePostWindow.clickedPostId) {
+        dispatch(
+          updatePostBody({
+            id: singlePostWindow.clickedPostId,
+            body: textareaEditedValue.current.value,
+          }),
+        )
+        dispatch(setIsOpen(false))
+      }
+
+      // appState.modalWindow.editedPost.body =
+      //   elements.textareaEditedValue && elements.textareaEditedValue.value
+      // appState.modalWindow.isOpen = false
+      // updatePostBody(appState.modalWindow.editedPost.body)
+
+      // appState.postUpdate.isFetching = true
+      // render()
+
+      // await patchPost(appState)
+      // if (appState.postUpdate.error) {
+      //   updatePostBody(appState.modalWindow.originalPost.body)
+      // }
+    }
     const handleClickSinglePostWindow = (event: MouseEvent) => {
       if (
         (event.target as HTMLElement).id === "modal-back" ||
@@ -35,16 +67,12 @@ export const SinglePostWindow = () => {
     return () => {
       document.removeEventListener("mouseup", handleClickSinglePostWindow)
     }
-  }, [dispatch])
-
-  function onConfirm() {
-    console.log("test")
-  }
+  }, [dispatch, singlePostWindow.clickedPostId])
 
   if (post && singlePostWindow.isOpen) {
     return (
       <div className="modal-back" id="modal-back">
-        <div className="modal-window" id="modal-window" ref={modalWindowRef}>
+        <div className="modal-window" id="modal-window">
           <div className="modal-window-header" id="modal-window-header">
             <button id="modal-window-header__close-button">X</button>
           </div>
@@ -54,6 +82,7 @@ export const SinglePostWindow = () => {
           >
             <h3>{`${post.id}. ${capitalizeFirstLetter(post.title)}`}</h3>
             <textarea
+              ref={textareaEditedValue}
               id="modal-window-edited-post__edited-text"
               style={{ resize: "none" }}
               cols={58}

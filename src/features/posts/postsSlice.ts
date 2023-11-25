@@ -5,7 +5,7 @@ import { allPosts } from "../../app/services/allPosts"
 
 export interface PostsState {
   allPosts: Posts[]
-  currentPosts?: Posts[]
+  currentPosts: Posts[]
   maxPostsPerPage: number
   searchValue: string
 }
@@ -14,6 +14,11 @@ export interface Posts {
   userId: number
   id: number
   title: string
+  body: string
+}
+
+export interface UpdatedPostBody {
+  id: number
   body: string
 }
 
@@ -34,10 +39,19 @@ export const postsSlice = createSlice({
     setSearchValue(state, action: PayloadAction<PostsState["searchValue"]>) {
       state.searchValue = action.payload
     },
+    updatePostBody(state, action: PayloadAction<UpdatedPostBody>) {
+      const { id, body } = action.payload
+      const existingPost = state.allPosts.find((post) => post.id === id)
+
+      if (existingPost) {
+        existingPost.body = body
+      }
+    },
   },
 })
 
-export const { setCurrentPosts, setSearchValue } = postsSlice.actions
+export const { setCurrentPosts, setSearchValue, updatePostBody } =
+  postsSlice.actions
 
 export const selectPosts = (state: RootState) => state.posts
 
