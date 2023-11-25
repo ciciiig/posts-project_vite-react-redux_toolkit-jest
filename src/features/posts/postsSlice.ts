@@ -31,10 +31,13 @@ export const postsSlice = createSlice({
     setCurrentPosts(state, action: PayloadAction<Posts[]>) {
       state.currentPosts = action.payload
     },
+    setSearchValue(state, action: PayloadAction<PostsState["searchValue"]>) {
+      state.searchValue = action.payload
+    },
   },
 })
 
-export const { setCurrentPosts } = postsSlice.actions
+export const { setCurrentPosts, setSearchValue } = postsSlice.actions
 
 export const selectPosts = (state: RootState) => state.posts
 

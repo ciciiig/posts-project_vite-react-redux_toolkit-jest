@@ -23,6 +23,12 @@ export const paginationSlice = createSlice({
   name: "pagination",
   initialState,
   reducers: {
+    setCurrentPage(
+      state,
+      action: PayloadAction<PaginationState["currentPage"]>,
+    ) {
+      state.currentPage = action.payload
+    },
     setPreviousPage(state) {
       state.currentPage -= 1
       if (state.currentPage <= 1) {
@@ -47,7 +53,7 @@ export const paginationSlice = createSlice({
   },
 })
 
-export const { setPreviousPage, setNextPage, setMaxPages } =
+export const { setCurrentPage, setPreviousPage, setNextPage, setMaxPages } =
   paginationSlice.actions
 
 export const selectPagination = (state: RootState) => state.pagination
