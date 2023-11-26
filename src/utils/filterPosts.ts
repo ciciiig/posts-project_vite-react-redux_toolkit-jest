@@ -1,7 +1,7 @@
-import { Posts, PostsState } from "../features/posts/postsSlice"
+import { Post, PostsState } from "../features/posts/postsSlice"
 
 export const filterPosts = (
-  posts: Posts[],
+  posts: Post[],
   searchValue: PostsState["searchValue"],
 ) =>
   posts.filter(

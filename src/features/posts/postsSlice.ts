@@ -4,13 +4,13 @@ import config from "../../../config.json"
 import { allPosts } from "../../app/services/allPosts"
 
 export interface PostsState {
-  allPosts: Posts[]
-  currentPosts: Posts[]
+  allPosts: Post[]
+  currentPosts: Post[]
   maxPostsPerPage: number
   searchValue: string
 }
 
-export interface Posts {
+export interface Post {
   userId: number
   id: number
   title: string
@@ -33,7 +33,7 @@ export const postsSlice = createSlice({
   name: "posts",
   initialState,
   reducers: {
-    setCurrentPosts(state, action: PayloadAction<Posts[]>) {
+    setCurrentPosts(state, action: PayloadAction<Post[]>) {
       state.currentPosts = action.payload
     },
     setSearchValue(state, action: PayloadAction<PostsState["searchValue"]>) {

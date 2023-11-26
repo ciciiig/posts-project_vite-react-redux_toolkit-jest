@@ -1,4 +1,6 @@
-// export async function fetchPosts(appState) {
+// import { Posts } from "../../features/posts/postsSlice"
+
+// export async function fetchPosts(appState: Posts[]) {
 //   try {
 //     appState.isFetching = true
 //     const response = await fetch(appState.urlPosts)

@@ -1,10 +1,10 @@
 import { filterPosts } from "./filterPosts.js"
 import config from "../../config.json"
-import { Posts, PostsState } from "../features/posts/postsSlice.js"
+import { Post, PostsState } from "../features/posts/postsSlice.js"
 import { PaginationState } from "../features/pagination/paginationSlice.js"
 
 export const getCurrentPostsState = (
-  allPosts: Posts[],
+  allPosts: Post[],
   currentPage: PaginationState["currentPage"],
   searchValue: PostsState["searchValue"],
 ) => {

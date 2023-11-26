@@ -1,12 +1,12 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit"
 import { RootState } from "../../app/store"
-import { Posts } from "../posts/postsSlice"
+import { Post } from "../posts/postsSlice"
 
 export interface SinglePostWindowState {
   isOpen: boolean
   clickedPostId: number | null
-  originalPost: Posts | undefined
-  editedPost: Posts | undefined
+  originalPost: Post | undefined
+  editedPost: Post | undefined
 }
 
 const initialState: SinglePostWindowState = {
@@ -26,10 +26,10 @@ export const singlePostWindowSlice = createSlice({
     setIsOpen: (state, action: PayloadAction<boolean>) => {
       state.isOpen = action.payload
     },
-    setOriginalPost: (state, action: PayloadAction<Posts>) => {
+    setOriginalPost: (state, action: PayloadAction<Post>) => {
       state.originalPost = { ...action.payload }
     },
-    setEditedPost: (state, action: PayloadAction<Posts>) => {
+    setEditedPost: (state, action: PayloadAction<Post>) => {
       state.editedPost = { ...action.payload }
     },
   },
