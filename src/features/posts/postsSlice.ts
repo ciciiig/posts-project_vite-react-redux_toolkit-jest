@@ -1,6 +1,7 @@
 import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit"
 import { RootState } from "../../app/store"
 import config from "../../../config.json"
+import { SinglePostWindowState } from "../singlePostWindow/singlePostWindowSlice"
 
 export interface PostsState {
   allPosts: Post[]
@@ -37,6 +38,22 @@ export const fetchPosts = createAsyncThunk("posts/fetchPosts", async () => {
   return await response.json()
 })
 
+export const patchPost = createAsyncThunk(
+  "posts/patchPost",
+  async (postToUpdate: SinglePostWindowState) => {
+    const urlPost = `https://jsonplaceholdersd.typicode.com/posts/${postToUpdate.clickedPostId}`
+    const payload = postToUpdate.editedPost
+    const options = {
+      method: "PATCH",
+      body: JSON.stringify(payload),
+      headers: { "Content-type": "application/json; charset=UTF-8" },
+    }
+
+    const response = await fetch(urlPost, options)
+    return await response.json()
+  },
+)
+
 export const postsSlice = createSlice({
   name: "posts",
   initialState,
@@ -69,6 +86,33 @@ export const postsSlice = createSlice({
       .addCase(fetchPosts.rejected, (state, action) => {
         state.status = "failed"
         state.error = `${action.error.name}: ${action.error.message}`
+      })
+      .addCase(patchPost.pending, (state) => {
+        state.status = "loading"
+      })
+      .addCase(
+        patchPost.fulfilled,
+        (state, action: PayloadAction<SinglePostWindowState>) => {
+          state.status = "idle"
+          const editedPost = action.payload.editedPost
+          if (editedPost && editedPost.body !== undefined) {
+            updatePostBody({ id: editedPost.id, body: editedPost.body })
+          }
+        },
+      )
+      .addCase(patchPost.rejected, (state, action) => {
+        state.status = "failed"
+        state.error = `${action.error.name}: ${action.error.message}`
+        const { id, body } = action.meta.arg.editedPost
+        const existingPost = state.allPosts.find((post) => post.id === id)
+
+        if (existingPost) {
+          existingPost.body = body
+        }
+        // setTimeout(() => {
+        //   state.status = "idle"
+        //   console.log(state.status)
+        // }, 2000)
       })
   },
 })

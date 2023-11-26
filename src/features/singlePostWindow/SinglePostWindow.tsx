@@ -1,7 +1,7 @@
 import "./SinglePostWindow.css"
 import { capitalizeFirstLetter } from "../../utils/capitalizeFirstLetter"
 import { useAppDispatch, useAppSelector } from "../../app/hooks"
-import { selectPosts, updatePostBody } from "../posts/postsSlice"
+import { patchPost, selectPosts, updatePostBody } from "../posts/postsSlice"
 import { selectSinglePostWindow, setIsOpen } from "./singlePostWindowSlice"
 import { useEffect, useRef } from "react"
 
@@ -27,12 +27,7 @@ export const SinglePostWindow = () => {
         dispatch(setIsOpen(false))
       }
 
-      // appState.postUpdate.isFetching = true
-
-      // await patchPost(appState)
-      // if (appState.postUpdate.error) {
-      //   updatePostBody(appState.modalWindow.originalPost.body)
-      // }
+      dispatch(patchPost(singlePostWindow))
     }
     const handleClickSinglePostWindow = (event: MouseEvent) => {
       if (
@@ -53,7 +48,7 @@ export const SinglePostWindow = () => {
     return () => {
       document.removeEventListener("mouseup", handleClickSinglePostWindow)
     }
-  }, [dispatch, singlePostWindow.clickedPostId])
+  }, [dispatch, singlePostWindow, singlePostWindow.clickedPostId])
 
   if (post && singlePostWindow.isOpen) {
     return (
