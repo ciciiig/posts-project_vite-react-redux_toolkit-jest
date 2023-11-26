@@ -17,14 +17,6 @@ export const SinglePostWindow = () => {
 
   useEffect(() => {
     function onConfirm() {
-      // const updatePostBody = (body) => {
-      //   appState.posts.forEach((post) => {
-      //     if (post.id === singlePostWindow.clickedPostId.id) {
-      //       post.body = body
-      //     }
-      //   })
-      // }
-
       if (textareaEditedValue.current && singlePostWindow.clickedPostId) {
         dispatch(
           updatePostBody({
@@ -35,13 +27,7 @@ export const SinglePostWindow = () => {
         dispatch(setIsOpen(false))
       }
 
-      // appState.modalWindow.editedPost.body =
-      //   elements.textareaEditedValue && elements.textareaEditedValue.value
-      // appState.modalWindow.isOpen = false
-      // updatePostBody(appState.modalWindow.editedPost.body)
-
       // appState.postUpdate.isFetching = true
-      // render()
 
       // await patchPost(appState)
       // if (appState.postUpdate.error) {
