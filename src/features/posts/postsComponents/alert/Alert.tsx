@@ -8,9 +8,7 @@ export const Alert: FC = () => {
   let alertContent = null
 
   if (postState.status === "loading") {
-    alertContent = (
-      <div className="alert-message_updating">Post Updating...</div>
-    )
+    alertContent = <div className="alert-message_updating">Loading...</div>
   }
 
   if (postState.status === "failed") {

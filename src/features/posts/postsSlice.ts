@@ -5,7 +5,7 @@ import config from "../../../config.json"
 export interface PostsState {
   allPosts: Post[]
   status: "idle" | "loading" | "failed"
-  error: string | null
+  error: string | undefined
   currentPosts: Post[]
   maxPostsPerPage: number
   searchValue: string
@@ -26,7 +26,7 @@ export interface UpdatedPostBody {
 const initialState: PostsState = {
   allPosts: [],
   status: "idle",
-  error: null,
+  error: undefined,
   currentPosts: [],
   maxPostsPerPage: config.maxPostsPerPage,
   searchValue: "",
@@ -62,12 +62,13 @@ export const postsSlice = createSlice({
       .addCase(fetchPosts.pending, (state) => {
         state.status = "loading"
       })
-      .addCase(fetchPosts.fulfilled, (state, action) => {
+      .addCase(fetchPosts.fulfilled, (state, action: PayloadAction<Post[]>) => {
         state.status = "idle"
         state.allPosts = action.payload
       })
-      .addCase(fetchPosts.rejected, (state) => {
+      .addCase(fetchPosts.rejected, (state, action) => {
         state.status = "failed"
+        state.error = `${action.error.name}: ${action.error.message}`
       })
   },
 })
