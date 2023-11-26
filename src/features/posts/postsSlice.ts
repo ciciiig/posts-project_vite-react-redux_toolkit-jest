@@ -109,6 +109,7 @@ export const postsSlice = createSlice({
         if (existingPost) {
           existingPost.body = body
         }
+        // TODO: dissapear alert after 5 seconds
         // setTimeout(() => {
         //   state.status = "idle"
         //   console.log(state.status)

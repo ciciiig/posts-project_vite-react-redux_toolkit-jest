@@ -12,7 +12,7 @@ import {
   selectPagination,
   setMaxPages,
 } from "../../../pagination/paginationSlice"
-import { useEffect } from "react"
+import { useEffect, useRef } from "react"
 import { setCurrentPosts } from "../../postsSlice"
 import { CreatePostCard } from "../createPostCard/CreatePostCard"
 import { Alert } from "../alert/Alert"
@@ -23,7 +23,13 @@ export const PostsList = () => {
   const dispatch = useAppDispatch()
 
   useEffect(() => {
+    // TODO: abort controller
+    const controller = new AbortController()
     dispatch(fetchPosts())
+
+    return () => {
+      controller.abort()
+    }
   }, [dispatch])
 
   useEffect(() => {
