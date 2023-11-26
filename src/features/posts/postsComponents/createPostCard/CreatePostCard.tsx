@@ -21,10 +21,6 @@ export const CreatePostCard: FC = () => {
         <div className="post-body">{post.body}</div>
       </div>
     ))
-  } else {
-    renderPosts = (
-      <h1>"We couldn't find any posts matching your search criteria."</h1>
-    )
   }
 
   return renderPosts

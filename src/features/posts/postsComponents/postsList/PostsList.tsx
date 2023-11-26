@@ -15,6 +15,7 @@ import {
 import { useEffect } from "react"
 import { setCurrentPosts } from "../../postsSlice"
 import { CreatePostCard } from "../createPostCard/CreatePostCard"
+import { Alert } from "../alert/Alert"
 
 export const PostsList = () => {
   const posts = useAppSelector(selectPosts)
@@ -61,6 +62,7 @@ export const PostsList = () => {
       onClick={handleClickPosts}
     >
       <CreatePostCard />
+      <Alert />
     </div>
   )
 }
