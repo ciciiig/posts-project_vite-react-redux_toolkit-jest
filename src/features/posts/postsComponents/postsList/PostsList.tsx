@@ -1,6 +1,6 @@
 import "./PostsList.css"
 import { useAppDispatch, useAppSelector } from "../../../../app/hooks"
-import { selectPosts } from "../../postsSlice"
+import { fetchPosts, selectPosts } from "../../postsSlice"
 import {
   setClickedPostId,
   setEditedPost,
@@ -20,6 +20,10 @@ export const PostsList = () => {
   const posts = useAppSelector(selectPosts)
   const pagination = useAppSelector(selectPagination)
   const dispatch = useAppDispatch()
+
+  useEffect(() => {
+    dispatch(fetchPosts())
+  }, [dispatch])
 
   useEffect(() => {
     const currentPosts = getCurrentPostsState(

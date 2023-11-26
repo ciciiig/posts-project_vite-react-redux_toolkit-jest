@@ -1,10 +1,11 @@
-import { PayloadAction, createSlice } from "@reduxjs/toolkit"
+import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit"
 import { RootState } from "../../app/store"
 import config from "../../../config.json"
-import { allPosts } from "../../app/services/allPosts"
 
 export interface PostsState {
   allPosts: Post[]
+  status: "idle" | "loading" | "failed"
+  error: string | null
   currentPosts: Post[]
   maxPostsPerPage: number
   searchValue: string
@@ -23,11 +24,18 @@ export interface UpdatedPostBody {
 }
 
 const initialState: PostsState = {
-  allPosts: allPosts,
+  allPosts: [],
+  status: "idle",
+  error: null,
   currentPosts: [],
   maxPostsPerPage: config.maxPostsPerPage,
   searchValue: "",
 }
+
+export const fetchPosts = createAsyncThunk("posts/fetchPosts", async () => {
+  const response = await fetch("https://jsonplaceholder.typicode.com/posts")
+  return await response.json()
+})
 
 export const postsSlice = createSlice({
   name: "posts",
@@ -47,6 +55,20 @@ export const postsSlice = createSlice({
         existingPost.body = body
       }
     },
+  },
+
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchPosts.pending, (state) => {
+        state.status = "loading"
+      })
+      .addCase(fetchPosts.fulfilled, (state, action) => {
+        state.status = "idle"
+        state.allPosts = action.payload
+      })
+      .addCase(fetchPosts.rejected, (state) => {
+        state.status = "failed"
+      })
   },
 })
 
