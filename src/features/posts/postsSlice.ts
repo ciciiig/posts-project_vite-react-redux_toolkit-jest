@@ -40,8 +40,8 @@ export const fetchPosts = createAsyncThunk("posts/fetchPosts", async () => {
 
 export const patchPost = createAsyncThunk(
   "posts/patchPost",
-  async (postToUpdate: SinglePostWindowState) => {
-    const urlPost = `https://jsonplaceholder.typicode.com/posts/${postToUpdate.clickedPostId}`
+  async (postToUpdate: SinglePostWindowState, thunkAPI) => {
+    const urlPost = `https://jsonplaceholderz.typicode.com/posts/${postToUpdate.clickedPostId}`
     const payload = postToUpdate.editedPost
     const options = {
       method: "PATCH",
@@ -49,7 +49,10 @@ export const patchPost = createAsyncThunk(
       headers: { "Content-type": "application/json; charset=UTF-8" },
     }
 
-    const response = await fetch(urlPost, options)
+    const response = await fetch(urlPost, {
+      ...options,
+      signal: thunkAPI.signal,
+    })
     return await response.json()
   },
 )

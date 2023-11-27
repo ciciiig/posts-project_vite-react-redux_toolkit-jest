@@ -26,8 +26,10 @@ export const SinglePostWindow = () => {
         )
         dispatch(setIsOpen(false))
       }
-
-      dispatch(patchPost(singlePostWindow))
+      const promise = dispatch(patchPost(singlePostWindow))
+      return () => {
+        promise.abort()
+      }
     }
     const handleClickSinglePostWindow = (event: MouseEvent) => {
       if (

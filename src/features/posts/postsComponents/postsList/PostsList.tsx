@@ -23,13 +23,7 @@ export const PostsList = () => {
   const dispatch = useAppDispatch()
 
   useEffect(() => {
-    // TODO: abort controller
-    const controller = new AbortController()
     dispatch(fetchPosts())
-
-    return () => {
-      controller.abort()
-    }
   }, [dispatch])
 
   useEffect(() => {
