@@ -10,6 +10,7 @@ export interface PostsState {
   currentPosts: Post[]
   maxPostsPerPage: number
   searchValue: string
+  patchRequests: { [key in string]: Promise<PayloadAction> }
 }
 
 export interface Post {
@@ -31,6 +32,7 @@ const initialState: PostsState = {
   currentPosts: [],
   maxPostsPerPage: config.maxPostsPerPage,
   searchValue: "",
+  patchRequests: {},
 }
 
 export const fetchPosts = createAsyncThunk("posts/fetchPosts", async () => {
@@ -41,7 +43,7 @@ export const fetchPosts = createAsyncThunk("posts/fetchPosts", async () => {
 export const patchPost = createAsyncThunk(
   "posts/patchPost",
   async (postToUpdate: SinglePostWindowState, thunkAPI) => {
-    const urlPost = `https://jsonplaceholderz.typicode.com/posts/${postToUpdate.clickedPostId}`
+    const urlPost = `https://jsonplaceholder.typicode.com/posts/${postToUpdate.clickedPostId}`
     const payload = postToUpdate.editedPost
     const options = {
       method: "PATCH",
@@ -74,6 +76,17 @@ export const postsSlice = createSlice({
       if (existingPost) {
         existingPost.body = body
       }
+    },
+    setPatchRequest(
+      state,
+      action: PayloadAction<{
+        id: number
+        fetchObject: Promise<PayloadAction<any>>
+      }>,
+    ) {
+      const { id, fetchObject } = action.payload
+
+      state.patchRequests[id] = fetchObject
     },
   },
 
@@ -121,8 +134,12 @@ export const postsSlice = createSlice({
   },
 })
 
-export const { setCurrentPosts, setSearchValue, updatePostBody } =
-  postsSlice.actions
+export const {
+  setCurrentPosts,
+  setSearchValue,
+  updatePostBody,
+  setPatchRequest,
+} = postsSlice.actions
 
 export const selectPosts = (state: RootState) => state.posts
 

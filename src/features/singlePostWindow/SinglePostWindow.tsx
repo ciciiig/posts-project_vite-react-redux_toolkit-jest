@@ -1,88 +1,101 @@
 import "./SinglePostWindow.css"
 import { capitalizeFirstLetter } from "../../utils/capitalizeFirstLetter"
 import { useAppDispatch, useAppSelector } from "../../app/hooks"
-import { patchPost, selectPosts, updatePostBody } from "../posts/postsSlice"
+import {
+  patchPost,
+  selectPosts,
+  updatePostBody,
+  setPatchRequest,
+} from "../posts/postsSlice"
 import { selectSinglePostWindow, setIsOpen } from "./singlePostWindowSlice"
-import { useEffect, useRef } from "react"
+import { ChangeEventHandler, MouseEventHandler, useRef, useState } from "react"
 
-export const SinglePostWindow = () => {
+export const PostModalWindow = () => {
   const posts = useAppSelector(selectPosts)
   const singlePostWindow = useAppSelector(selectSinglePostWindow)
   const dispatch = useAppDispatch()
   const textareaEditedValue = useRef<HTMLTextAreaElement>(null)
+  const post = singlePostWindow.originalPost
+  const [textAreaValue, setTextAreaValue] = useState("")
 
-  const post = posts.allPosts.find(
-    (currentPost) => currentPost.id === singlePostWindow.clickedPostId,
-  )
+  const handleTextAreaOnChange: ChangeEventHandler<HTMLTextAreaElement> = (
+    changeEvent,
+  ) => {
+    const { value } = changeEvent.currentTarget
+    setTextAreaValue(value)
+  }
 
-  useEffect(() => {
-    function onConfirm() {
-      if (textareaEditedValue.current && singlePostWindow.clickedPostId) {
-        dispatch(
-          updatePostBody({
-            id: singlePostWindow.clickedPostId,
-            body: textareaEditedValue.current.value,
-          }),
-        )
-        dispatch(setIsOpen(false))
-      }
-      const promise = dispatch(patchPost(singlePostWindow))
-      return () => {
-        promise.abort()
-      }
+  const handleCloseModalWindow: MouseEventHandler<
+    HTMLDivElement | HTMLButtonElement
+  > = (clickEvent) => {
+    const { id } = clickEvent.target as HTMLDivElement | HTMLButtonElement
+    if (id === "modal-back" || id === "modal-window-header__close-button") {
+      dispatch(setIsOpen(false))
     }
-    const handleClickSinglePostWindow = (event: MouseEvent) => {
-      if (
-        (event.target as HTMLElement).id === "modal-back" ||
-        (event.target as HTMLElement).id === "modal-window-header__close-button"
-      ) {
-        dispatch(setIsOpen(false))
-      }
-      if (
-        (event.target as HTMLElement).id ===
-        "modal-window-acton-buttons-container__confirm-button"
-      ) {
-        onConfirm()
-      }
-    }
-    document.addEventListener("mouseup", handleClickSinglePostWindow)
+  }
 
-    return () => {
-      document.removeEventListener("mouseup", handleClickSinglePostWindow)
+  const handleConfirm = () => {
+    if (!singlePostWindow.clickedPostId) {
+      return
     }
-  }, [dispatch, singlePostWindow, singlePostWindow.clickedPostId])
 
-  if (post && singlePostWindow.isOpen) {
-    return (
-      <div className="modal-back" id="modal-back">
-        <div className="modal-window" id="modal-window">
-          <div className="modal-window-header" id="modal-window-header">
-            <button id="modal-window-header__close-button">X</button>
-          </div>
-          <div
-            className="modal-window-edited-post"
-            id="modal-window-edited-post"
+    dispatch(
+      updatePostBody({
+        id: singlePostWindow.clickedPostId,
+        body: textAreaValue,
+      }),
+    )
+    // ToDo fix type
+    posts.patchRequests[post!.id]?.abort()
+    const promise = dispatch(patchPost(singlePostWindow))
+    dispatch(
+      setPatchRequest({
+        id: post!.id,
+        fetchObject: promise,
+      }),
+    )
+    dispatch(setIsOpen(false))
+  }
+
+  return (
+    <div
+      className="modal-back"
+      id="modal-back"
+      onClick={handleCloseModalWindow}
+    >
+      <div className="modal-window" id="modal-window">
+        <div className="modal-window-header" id="modal-window-header">
+          <button
+            id="modal-window-header__close-button"
+            onClick={handleCloseModalWindow}
           >
-            <h3>{`${post.id}. ${capitalizeFirstLetter(post.title)}`}</h3>
-            <textarea
-              ref={textareaEditedValue}
-              id="modal-window-edited-post__edited-text"
-              style={{ resize: "none" }}
-              cols={58}
-              rows={10}
-              defaultValue={post.body}
-            />
-          </div>
-          <div
-            className="modal-window-acton-buttons-container"
-            id="modal-window-acton-buttons-container"
+            X
+          </button>
+        </div>
+        <div className="modal-window-edited-post" id="modal-window-edited-post">
+          <h3>{`${post.id}. ${capitalizeFirstLetter(post.title)}`}</h3>
+          <textarea
+            ref={textareaEditedValue}
+            id="modal-window-edited-post__edited-text"
+            style={{ resize: "none" }}
+            cols={58}
+            rows={10}
+            defaultValue={textAreaValue || post?.body}
+            onChange={handleTextAreaOnChange}
+          />
+        </div>
+        <div
+          className="modal-window-acton-buttons-container"
+          id="modal-window-acton-buttons-container"
+        >
+          <button
+            id="modal-window-acton-buttons-container__confirm-button"
+            onClick={handleConfirm}
           >
-            <button id="modal-window-acton-buttons-container__confirm-button">
-              Confirm
-            </button>
-          </div>
+            Confirm
+          </button>
         </div>
       </div>
-    )
-  }
+    </div>
+  )
 }

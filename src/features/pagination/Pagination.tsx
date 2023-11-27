@@ -5,21 +5,17 @@ import {
   setNextPage,
   setPreviousPage,
 } from "./paginationSlice"
-import { useRef } from "react"
 
 export const Pagination = () => {
   const pagination = useAppSelector(selectPagination)
   const dispatch = useAppDispatch()
-  const prevBtnElement = useRef(null)
 
   return (
     <div className="pagination-container">
       <button
         className="arrow"
-        ref={prevBtnElement}
         disabled={pagination.postNavigation.isPrevBtnDisabled}
         onClick={() => dispatch(setPreviousPage())}
-        // onClick={() => console.log(prevBtnElement.current)}
       >
         {"<<<"}
       </button>

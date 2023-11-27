@@ -1,27 +1,43 @@
 import "./CreatePostCard.css"
-import { FC } from "react"
-import { useAppSelector } from "../../../../app/hooks"
-import { selectPosts } from "../../postsSlice"
+import { FC, MouseEventHandler } from "react"
+import { useAppDispatch, useAppSelector } from "../../../../app/hooks"
+import { Post, selectPosts } from "../../postsSlice"
 import { shortenText } from "../../../../utils/shortenText"
+import {
+  setClickedPostId,
+  setEditedPost,
+  setIsOpen,
+  setOriginalPost,
+} from "../../../singlePostWindow/singlePostWindowSlice"
 
-export const CreatePostCard: FC = () => {
-  const posts = useAppSelector(selectPosts)
+export type CreatePostCardProps = {
+  post: Post
+}
 
-  let renderPosts
+export const CreatePostCard: FC<CreatePostCardProps> = ({ post }) => {
+  const dispatch = useAppDispatch()
 
-  if (posts.currentPosts && posts.currentPosts.length > 0) {
-    renderPosts = posts.currentPosts.map((post) => (
-      <div
-        className="post"
-        id={`post-card-${post.id}`}
-        key={crypto.randomUUID()}
-      >
-        <div>{post.id}</div>
-        <div>{shortenText(post.title)}</div>
-        <div className="post-body">{post.body}</div>
-      </div>
-    ))
+  const handleClickPost: MouseEventHandler<HTMLDivElement> = (event) => {
+    const { id: postId } = event.currentTarget
+    const id = +postId.split("post-card-")[1]
+    dispatch(setClickedPostId(id))
+    dispatch(setIsOpen(true))
+    console.log("-- post", post)
+    if (!post) return
+    dispatch(setOriginalPost(post))
+    dispatch(setEditedPost(post))
   }
 
-  return renderPosts
+  return (
+    <div
+      className="post"
+      id={`post-card-${post.id}`}
+      key={crypto.randomUUID()}
+      onClick={handleClickPost}
+    >
+      <div>{post.id}</div>
+      <div>{shortenText(post.title)}</div>
+      <div className="post-body">{post.body}</div>
+    </div>
+  )
 }

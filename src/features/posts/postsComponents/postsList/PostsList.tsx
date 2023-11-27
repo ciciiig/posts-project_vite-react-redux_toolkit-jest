@@ -12,7 +12,7 @@ import {
   selectPagination,
   setMaxPages,
 } from "../../../pagination/paginationSlice"
-import { useEffect, useRef } from "react"
+import { useEffect } from "react"
 import { setCurrentPosts } from "../../postsSlice"
 import { CreatePostCard } from "../createPostCard/CreatePostCard"
 import { Alert } from "../alert/Alert"
@@ -36,32 +36,11 @@ export const PostsList = () => {
     dispatch(setCurrentPosts(currentPosts.currentPosts))
   }, [dispatch, posts.allPosts, pagination.currentPage, posts.searchValue])
 
-  const handleClickPosts = (clickEvent: React.MouseEvent<HTMLDivElement>) => {
-    const target = clickEvent.target as HTMLElement
-    const closestPostCard = target.closest(".post")
-
-    if (closestPostCard) {
-      const postId = closestPostCard.id.split("-")[2]
-      const clickedPost = posts.allPosts.find(
-        (currentPost) => currentPost.id === +postId,
-      )
-
-      if (clickedPost) {
-        dispatch(setClickedPostId(+postId))
-        dispatch(setIsOpen(true))
-        dispatch(setOriginalPost(clickedPost))
-        dispatch(setEditedPost(clickedPost))
-      }
-    }
-  }
-
   return (
-    <div
-      className="posts_container"
-      id="posts_container"
-      onClick={handleClickPosts}
-    >
-      <CreatePostCard />
+    <div className="posts_container" id="posts_container">
+      {posts.currentPosts?.map((post) => (
+        <CreatePostCard post={post} />
+      ))}
       <Alert />
     </div>
   )
