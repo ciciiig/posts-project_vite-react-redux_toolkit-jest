@@ -22,7 +22,6 @@ export const CreatePostCard: FC<CreatePostCardProps> = ({ post }) => {
     const id = +postId.split("post-card-")[1]
     dispatch(setClickedPostId(id))
     dispatch(setIsOpen(true))
-    console.log("-- post", post)
     if (!post) return
     dispatch(setOriginalPost(post))
     dispatch(setEditedPost(post))
