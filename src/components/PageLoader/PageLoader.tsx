@@ -1,9 +1,9 @@
-import "./AlertSkeleton.css"
+import "./PageLoader.css"
 import { FC } from "react"
-import { useAppSelector } from "../../../../app/hooks"
-import { selectPosts } from "../../postsSlice"
+import { useAppSelector } from "../../redux/hooks"
+import { selectPosts } from "../../redux/posts"
 
-export const AlertSkeleton: FC = () => {
+export const PageLoader: FC = () => {
   const postState = useAppSelector(selectPosts)
   let skeletonAlertContent = null
 

@@ -1,7 +1,7 @@
 import { filterPosts } from "./filterPosts.js"
 import config from "../../config.json"
-import { Post, PostsState } from "../features/posts/postsSlice.js"
-import { PaginationState } from "../features/pagination/paginationSlice.js"
+import { Post, PostsState } from "../redux/posts/slice"
+import { PaginationState } from "../redux/pagination/slice"
 
 export const getCurrentPostsState = (
   allPosts: Post[],

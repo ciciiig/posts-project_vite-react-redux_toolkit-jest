@@ -1,10 +1,10 @@
 import "./Pagination.css"
-import { useAppDispatch, useAppSelector } from "../../app/hooks"
+import { useAppDispatch, useAppSelector } from "../../redux/hooks"
 import {
   selectPagination,
   setNextPage,
   setPreviousPage,
-} from "./paginationSlice"
+} from "../../redux/pagination"
 
 export const Pagination = () => {
   const pagination = useAppSelector(selectPagination)

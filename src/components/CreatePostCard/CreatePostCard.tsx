@@ -1,14 +1,14 @@
 import "./CreatePostCard.css"
 import { FC, MouseEventHandler } from "react"
-import { useAppDispatch, useAppSelector } from "../../../../app/hooks"
-import { Post, selectPosts } from "../../postsSlice"
-import { shortenText } from "../../../../utils/shortenText"
+import { useAppDispatch } from "../../redux/hooks"
+import { Post } from "../../redux/posts"
+import { shortenText } from "../../utils/shortenText"
 import {
   setClickedPostId,
   setEditedPost,
   setIsOpen,
   setOriginalPost,
-} from "../../../singlePostWindow/singlePostWindowSlice"
+} from "../../redux/postModal"
 
 export type CreatePostCardProps = {
   post: Post

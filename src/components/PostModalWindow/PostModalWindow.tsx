@@ -1,18 +1,18 @@
-import "./SinglePostWindow.css"
+import "./PostModalWindow.css"
 import { capitalizeFirstLetter } from "../../utils/capitalizeFirstLetter"
-import { useAppDispatch, useAppSelector } from "../../app/hooks"
+import { useAppDispatch, useAppSelector } from "../../redux/hooks"
 import {
   patchPost,
   selectPosts,
   updatePostBody,
   setPatchRequest,
-} from "../posts/postsSlice"
-import { selectSinglePostWindow, setIsOpen } from "./singlePostWindowSlice"
+} from "../../redux/posts"
+import { selectPostModal, setIsOpen } from "../../redux/postModal"
 import { ChangeEventHandler, MouseEventHandler, useRef, useState } from "react"
 
 export const PostModalWindow = () => {
   const posts = useAppSelector(selectPosts)
-  const singlePostWindow = useAppSelector(selectSinglePostWindow)
+  const singlePostWindow = useAppSelector(selectPostModal)
   const dispatch = useAppDispatch()
   const textareaEditedValue = useRef<HTMLTextAreaElement>(null)
   const post = singlePostWindow.originalPost

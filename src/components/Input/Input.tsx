@@ -1,11 +1,8 @@
 import { FC } from "react"
 import config from "../../../config.json"
-import { useAppDispatch } from "../hooks"
-import { setSearchValue } from "../../features/posts/postsSlice"
-import {
-  setCurrentPage,
-  setPreviousPage,
-} from "../../features/pagination/paginationSlice"
+import { useAppDispatch } from "../../redux/hooks"
+import { setSearchValue } from "../../redux/posts"
+import { setCurrentPage, setPreviousPage } from "../../redux/pagination"
 
 export const Input: FC = () => {
   const dispatch = useAppDispatch()

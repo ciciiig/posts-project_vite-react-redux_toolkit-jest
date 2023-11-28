@@ -1,15 +1,10 @@
 import "./PostsList.css"
-import { useAppDispatch, useAppSelector } from "../../../../app/hooks"
-import { fetchPosts, selectPosts } from "../../postsSlice"
-
-import { getCurrentPostsState } from "../../../../utils/getCurrentPostsState"
-import {
-  selectPagination,
-  setMaxPages,
-} from "../../../pagination/paginationSlice"
+import { useAppDispatch, useAppSelector } from "../../redux/hooks"
+import { fetchPosts, selectPosts, setCurrentPosts } from "../../redux/posts"
+import { selectPagination, setMaxPages } from "../../redux/pagination"
+import { getCurrentPostsState } from "../../utils/getCurrentPostsState"
 import { useEffect } from "react"
-import { setCurrentPosts } from "../../postsSlice"
-import { CreatePostCard } from "../createPostCard/CreatePostCard"
+import { CreatePostCard } from "../CreatePostCard/CreatePostCard"
 
 export const PostsList = () => {
   const posts = useAppSelector(selectPosts)

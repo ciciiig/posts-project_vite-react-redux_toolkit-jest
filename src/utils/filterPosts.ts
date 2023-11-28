@@ -1,4 +1,4 @@
-import { Post, PostsState } from "../features/posts/postsSlice"
+import { Post, PostsState } from "../redux/posts/slice"
 
 export const filterPosts = (
   posts: Post[],

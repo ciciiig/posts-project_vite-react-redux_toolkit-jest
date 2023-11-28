@@ -1,7 +1,7 @@
 import "./Alert.css"
 import { FC } from "react"
-import { useAppSelector } from "../../../../app/hooks"
-import { selectPosts } from "../../postsSlice"
+import { useAppSelector } from "../../redux/hooks"
+import { selectPosts } from "../../redux/posts"
 
 export const Alert: FC = () => {
   const postState = useAppSelector(selectPosts)

@@ -1,30 +1,8 @@
-import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit"
-import { RootState } from "../../app/store"
+import { PayloadAction, createSlice } from "@reduxjs/toolkit"
 import config from "../../../config.json"
-import { SinglePostWindowState } from "../singlePostWindow/singlePostWindowSlice"
-
-export interface PostsState {
-  allPosts: Post[]
-  skeletonStatus: "idle" | "loading" | "failed"
-  status: "idle" | "loading" | "failed"
-  error: string | undefined
-  currentPosts: Post[]
-  maxPostsPerPage: number
-  searchValue: string
-  patchRequests: { [key in string]: Promise<PayloadAction> }
-}
-
-export interface Post {
-  userId: number
-  id: number
-  title: string
-  body: string
-}
-
-export interface UpdatedPostBody {
-  id: number
-  body: string
-}
+import { PostModalState } from "../postModal"
+import { Post, PostsState, UpdatedPostBody } from "./type"
+import { fetchPosts, patchPost, updatePostBody } from "./actions"
 
 const initialState: PostsState = {
   allPosts: [],
@@ -36,30 +14,6 @@ const initialState: PostsState = {
   searchValue: "",
   patchRequests: {},
 }
-
-export const fetchPosts = createAsyncThunk("posts/fetchPosts", async () => {
-  const response = await fetch("https://jsonplaceholder.typicode.com/posts")
-  return await response.json()
-})
-
-export const patchPost = createAsyncThunk(
-  "posts/patchPost",
-  async (postToUpdate: SinglePostWindowState, thunkAPI) => {
-    const urlPost = `https://jsonplaceholder.typicode.com/posts/${postToUpdate.clickedPostId}`
-    const payload = postToUpdate.editedPost
-    const options = {
-      method: "PATCH",
-      body: JSON.stringify(payload),
-      headers: { "Content-type": "application/json; charset=UTF-8" },
-    }
-
-    const response = await fetch(urlPost, {
-      ...options,
-      signal: thunkAPI.signal,
-    })
-    return await response.json()
-  },
-)
 
 export const postsSlice = createSlice({
   name: "posts",
@@ -110,11 +64,14 @@ export const postsSlice = createSlice({
       })
       .addCase(
         patchPost.fulfilled,
-        (state, action: PayloadAction<SinglePostWindowState>) => {
+        (state, action: PayloadAction<PostModalState>) => {
           state.status = "idle"
           const editedPost = action.payload.editedPost
           if (editedPost && editedPost.body !== undefined) {
-            updatePostBody({ id: editedPost.id, body: editedPost.body })
+            postsSlice.actions.updatePostBody({
+              id: editedPost.id,
+              body: editedPost.body,
+            })
           }
         },
       )
@@ -127,7 +84,7 @@ export const postsSlice = createSlice({
         if (existingPost) {
           existingPost.body = body
         }
-        // TODO: dissapear alert after 5 seconds
+        // TODO: dissapear Alert after 5 seconds
         // setTimeout(() => {
         //   state.status = "idle"
         //   console.log(state.status)
@@ -135,14 +92,3 @@ export const postsSlice = createSlice({
       })
   },
 })
-
-export const {
-  setCurrentPosts,
-  setSearchValue,
-  updatePostBody,
-  setPatchRequest,
-} = postsSlice.actions
-
-export const selectPosts = (state: RootState) => state.posts
-
-export default postsSlice.reducer

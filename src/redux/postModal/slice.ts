@@ -1,22 +1,15 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit"
-import { RootState } from "../../app/store"
-import { Post } from "../posts/postsSlice"
+import { Post } from "../posts"
+import { PostModalState } from "./type"
 
-export interface SinglePostWindowState {
-  isOpen: boolean
-  clickedPostId: number | null
-  originalPost: Post | undefined
-  editedPost: Post | undefined
-}
-
-const initialState: SinglePostWindowState = {
+const initialState: PostModalState = {
   isOpen: false,
   clickedPostId: null,
   originalPost: undefined,
   editedPost: undefined,
 }
 
-export const singlePostWindowSlice = createSlice({
+export const postModalSlice = createSlice({
   name: "singlePostWindow",
   initialState,
   reducers: {
@@ -34,11 +27,3 @@ export const singlePostWindowSlice = createSlice({
     },
   },
 })
-
-export const { setClickedPostId, setIsOpen, setOriginalPost, setEditedPost } =
-  singlePostWindowSlice.actions
-
-export const selectSinglePostWindow = (state: RootState) =>
-  state.singlePostWindow
-
-export default singlePostWindowSlice.reducer
