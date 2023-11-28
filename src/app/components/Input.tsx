@@ -2,7 +2,10 @@ import { FC } from "react"
 import config from "../../../config.json"
 import { useAppDispatch } from "../hooks"
 import { setSearchValue } from "../../features/posts/postsSlice"
-import { setCurrentPage } from "../../features/pagination/paginationSlice"
+import {
+  setCurrentPage,
+  setPreviousPage,
+} from "../../features/pagination/paginationSlice"
 
 export const Input: FC = () => {
   const dispatch = useAppDispatch()
@@ -11,10 +14,12 @@ export const Input: FC = () => {
     const inputValue = event.target.value.trim()
     if (inputValue.length >= 3) {
       dispatch(setSearchValue(inputValue))
-      dispatch(setCurrentPage(1))
+      dispatch(setPreviousPage())
     } else {
       dispatch(setSearchValue(""))
+      dispatch(setPreviousPage())
     }
+    dispatch(setCurrentPage(1))
   }
 
   return (
