@@ -1,12 +1,7 @@
 import "./PostsList.css"
 import { useAppDispatch, useAppSelector } from "../../../../app/hooks"
 import { fetchPosts, selectPosts } from "../../postsSlice"
-import {
-  setClickedPostId,
-  setEditedPost,
-  setIsOpen,
-  setOriginalPost,
-} from "../../../singlePostWindow/singlePostWindowSlice"
+
 import { getCurrentPostsState } from "../../../../utils/getCurrentPostsState"
 import {
   selectPagination,
@@ -15,7 +10,6 @@ import {
 import { useEffect } from "react"
 import { setCurrentPosts } from "../../postsSlice"
 import { CreatePostCard } from "../createPostCard/CreatePostCard"
-import { Alert } from "../alert/Alert"
 
 export const PostsList = () => {
   const posts = useAppSelector(selectPosts)
@@ -39,9 +33,8 @@ export const PostsList = () => {
   return (
     <div className="posts_container" id="posts_container">
       {posts.currentPosts?.map((post) => (
-        <CreatePostCard post={post} />
+        <CreatePostCard key={crypto.randomUUID()} post={post} />
       ))}
-      <Alert />
     </div>
   )
 }
