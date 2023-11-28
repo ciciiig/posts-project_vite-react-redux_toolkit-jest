@@ -1,8 +1,8 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit"
 import config from "../../../config.json"
 import { PostModalState } from "../postModal"
-import { Post, PostsState, UpdatedPostBody } from "./type"
-import { fetchPosts, patchPost, updatePostBody } from "./actions"
+import { Post, PostsState, UpdatedPostBody } from "./"
+import { fetchPosts, patchPost } from "./"
 
 const initialState: PostsState = {
   allPosts: [],

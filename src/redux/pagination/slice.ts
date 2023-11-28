@@ -1,5 +1,5 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit"
-import { PaginationState } from "./type"
+import { PaginationState } from "./"
 
 const initialState: PaginationState = {
   currentPage: 1,

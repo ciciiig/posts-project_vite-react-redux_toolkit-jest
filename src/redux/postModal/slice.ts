@@ -1,6 +1,6 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit"
 import { Post } from "../posts"
-import { PostModalState } from "./type"
+import { PostModalState } from "./"
 
 const initialState: PostModalState = {
   isOpen: false,
