@@ -6,6 +6,7 @@ import { PostModalWindow } from "./features/singlePostWindow/SinglePostWindow"
 import { useAppSelector } from "./app/hooks"
 import { selectSinglePostWindow } from "./features/singlePostWindow/singlePostWindowSlice"
 import { Alert } from "./features/posts/postsComponents/alert/Alert"
+import { AlertSkeleton } from "./features/posts/postsComponents/alert-skeleton/AlertSkeleton"
 
 function App() {
   const { isOpen: isPostModalWindowOpen } = useAppSelector(
@@ -22,8 +23,8 @@ function App() {
         <Pagination />
       </>
 
+      <AlertSkeleton />
       <Alert />
-      {/*Skeleton*/}
     </div>
   )
 }

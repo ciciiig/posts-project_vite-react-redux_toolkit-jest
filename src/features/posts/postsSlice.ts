@@ -5,6 +5,7 @@ import { SinglePostWindowState } from "../singlePostWindow/singlePostWindowSlice
 
 export interface PostsState {
   allPosts: Post[]
+  skeletonStatus: "idle" | "loading" | "failed"
   status: "idle" | "loading" | "failed"
   error: string | undefined
   currentPosts: Post[]
@@ -27,6 +28,7 @@ export interface UpdatedPostBody {
 
 const initialState: PostsState = {
   allPosts: [],
+  skeletonStatus: "idle",
   status: "idle",
   error: undefined,
   currentPosts: [],
@@ -93,14 +95,14 @@ export const postsSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(fetchPosts.pending, (state) => {
-        state.status = "loading"
+        state.skeletonStatus = "loading"
       })
       .addCase(fetchPosts.fulfilled, (state, action: PayloadAction<Post[]>) => {
-        state.status = "idle"
+        state.skeletonStatus = "idle"
         state.allPosts = action.payload
       })
       .addCase(fetchPosts.rejected, (state, action) => {
-        state.status = "failed"
+        state.skeletonStatus = "failed"
         state.error = `${action.error.name}: ${action.error.message}`
       })
       .addCase(patchPost.pending, (state) => {
