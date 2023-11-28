@@ -1,5 +1,5 @@
 import { postService } from "./post"
-import { patchPostArgs } from "./type"
+import { PatchPostArgs } from "./type"
 
-export type { patchPostArgs }
+export type { PatchPostArgs }
 export { postService }

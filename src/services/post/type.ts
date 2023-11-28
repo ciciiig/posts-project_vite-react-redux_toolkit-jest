@@ -1,6 +1,6 @@
 import { Post } from "../../redux/posts"
 
-export type patchPostArgs = {
+export type PatchPostArgs = {
   signal: AbortSignal
   id: number
   post: Post

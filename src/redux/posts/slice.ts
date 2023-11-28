@@ -1,6 +1,5 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit"
 import config from "../../../config.json"
-import { PostModalState } from "../postModal"
 import { Post, PostsState, UpdatedPostBody } from "./"
 import { fetchPosts, patchPost } from "./"
 
@@ -62,33 +61,32 @@ export const postsSlice = createSlice({
       .addCase(patchPost.pending, (state) => {
         state.status = "loading"
       })
-      .addCase(
-        patchPost.fulfilled,
-        (state, action: PayloadAction<PostModalState>) => {
-          state.status = "idle"
-          const editedPost = action.payload.editedPost
-          if (editedPost && editedPost.body !== undefined) {
-            postsSlice.actions.updatePostBody({
-              id: editedPost.id,
-              body: editedPost.body,
-            })
-          }
-        },
-      )
+      .addCase(patchPost.fulfilled, (state, action) => {
+        // TODO: find out why action is coming empty
+        console.log(action)
+
+        state.status = "idle"
+        const editedPost = action.payload.editedPost
+        if (editedPost && editedPost.body !== undefined) {
+          postsSlice.actions.updatePostBody({
+            id: editedPost.id,
+            body: editedPost.body,
+          })
+        }
+      })
       .addCase(patchPost.rejected, (state, action) => {
         state.status = "failed"
         state.error = `${action.error.name}: ${action.error.message}`
-        const { id, body } = action.meta.arg.editedPost
-        const existingPost = state.allPosts.find((post) => post.id === id)
+        const id = action.meta.arg.editedPost?.id
+        const body = action.meta.arg.editedPost?.body
 
-        if (existingPost) {
-          existingPost.body = body
+        if (action.meta.arg.editedPost && body) {
+          const existingPost = state.allPosts.find((post) => post.id === id)
+
+          if (existingPost) {
+            existingPost.body = body
+          }
         }
-        // TODO: dissapear Alert after 5 seconds
-        // setTimeout(() => {
-        //   state.status = "idle"
-        //   console.log(state.status)
-        // }, 2000)
       })
   },
 })

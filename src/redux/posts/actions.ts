@@ -16,10 +16,13 @@ export const fetchPosts = createAsyncThunk("posts/fetchPosts", async () =>
 
 export const patchPost = createAsyncThunk(
   "posts/patchPost",
-  async (postToUpdate: PostModalState, thunkAPI) =>
-    await postService.patchPost({
-      id: postToUpdate.clickedPostId,
-      post: postToUpdate.editedPost,
-      signal: thunkAPI.signal,
-    }),
+  async (postToUpdate: PostModalState, thunkAPI) => {
+    if (postToUpdate.clickedPostId && postToUpdate.editedPost) {
+      await postService.patchPost({
+        id: postToUpdate.clickedPostId,
+        post: postToUpdate.editedPost,
+        signal: thunkAPI.signal,
+      })
+    }
+  },
 )
