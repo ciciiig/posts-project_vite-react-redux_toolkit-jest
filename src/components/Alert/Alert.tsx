@@ -1,27 +1,56 @@
 import "./Alert.css"
-import { FC } from "react"
+import { FC, ReactNode, useEffect, useState } from "react"
 import { useAppSelector } from "../../redux/hooks"
 import { selectPosts } from "../../redux/posts"
 
 export const Alert: FC = () => {
-  const postState = useAppSelector(selectPosts)
-  let alertContent = null
+  const { status, error } = useAppSelector(selectPosts)
+  const [alertState, setAlertState] = useState<{
+    isShow: boolean
+    alertContent: ReactNode
+  }>({
+    isShow: false,
+    alertContent: null,
+  })
 
-  if (postState.status === "loading") {
-    alertContent = <div className="alert-message_updating">Loading...</div>
-  }
+  // For close Alert
+  useEffect(() => {
+    let timerId: number
 
-  if (postState.status === "failed") {
-    alertContent = (
-      <div className="alert-message_error">
-        {postState.error ?? "Some error"}
-      </div>
-    )
-  }
+    if (alertState.isShow) {
+      timerId = setTimeout(() => {
+        setAlertState({ isShow: false, alertContent: null })
+        clearTimeout(timerId)
+      }, 3000)
+    }
 
-  return (
+    return () => {
+      timerId && clearTimeout(timerId)
+    }
+  }, [alertState.isShow])
+
+  // For set open Alert with correct content
+  useEffect(() => {
+    if (status === "loading") {
+      setAlertState({
+        isShow: true,
+        alertContent: <div className="alert-message_updating">Loading...</div>,
+      })
+    }
+
+    if (status === "failed") {
+      setAlertState({
+        isShow: true,
+        alertContent: (
+          <div className="alert-message_error">{error ?? "Some error"}</div>
+        ),
+      })
+    }
+  }, [status])
+
+  return alertState.isShow ? (
     <div className="alert-container" id="alert-container">
-      {alertContent}
+      {alertState.alertContent}
     </div>
-  )
+  ) : null
 }

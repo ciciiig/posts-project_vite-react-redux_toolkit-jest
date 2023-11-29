@@ -4,19 +4,24 @@ import { useAppDispatch, useAppSelector } from "../../redux/hooks"
 import {
   patchPost,
   selectPosts,
-  updatePostBody,
+  updatePost,
   setPatchRequest,
+  Post,
 } from "../../redux/posts"
-import { selectPostModal, setIsOpen } from "../../redux/postModal"
-import { ChangeEventHandler, MouseEventHandler, useRef, useState } from "react"
+import {
+  selectPostModal,
+  setEditedPost,
+  setIsOpen,
+} from "../../redux/postModal"
+import { ChangeEventHandler, MouseEventHandler, useState } from "react"
 
 export const PostModalWindow = () => {
   const posts = useAppSelector(selectPosts)
-  const singlePostWindow = useAppSelector(selectPostModal)
+  const { originalPost } = useAppSelector(selectPostModal)
   const dispatch = useAppDispatch()
-  const textareaEditedValue = useRef<HTMLTextAreaElement>(null)
-  const post = singlePostWindow.originalPost
   const [textAreaValue, setTextAreaValue] = useState("")
+
+  if (!originalPost) return null
 
   const handleTextAreaOnChange: ChangeEventHandler<HTMLTextAreaElement> = (
     changeEvent,
@@ -28,6 +33,7 @@ export const PostModalWindow = () => {
   const handleCloseModalWindow: MouseEventHandler<
     HTMLDivElement | HTMLButtonElement
   > = (clickEvent) => {
+    console.log("clickEvent", clickEvent)
     const { id } = clickEvent.target as HTMLDivElement | HTMLButtonElement
     if (id === "modal-back" || id === "modal-window-header__close-button") {
       dispatch(setIsOpen(false))
@@ -35,33 +41,32 @@ export const PostModalWindow = () => {
   }
 
   const handleConfirm = () => {
-    if (!singlePostWindow.clickedPostId) {
-      return
+    const editedPost: Post = {
+      ...originalPost,
+      body: textAreaValue,
     }
 
-    dispatch(
-      updatePostBody({
-        id: singlePostWindow.clickedPostId,
-        body: textAreaValue,
-      }),
-    )
+    dispatch(setIsOpen(false))
+    dispatch(setEditedPost(editedPost))
+    // optimistic update post
+    dispatch(updatePost(editedPost))
+
     // ToDo fix type
-    posts.patchRequests[post!.id]?.abort()
-    const promise = dispatch(patchPost(singlePostWindow))
+    posts.patchRequests[originalPost.id]?.abort()
+    const promise = dispatch(patchPost(editedPost))
     dispatch(
       setPatchRequest({
-        id: post!.id,
+        id: originalPost!.id,
         fetchObject: promise,
       }),
     )
-    dispatch(setIsOpen(false))
   }
 
   return (
     <div
       className="modal-back"
       id="modal-back"
-      onClick={handleCloseModalWindow}
+      onMouseDown={handleCloseModalWindow}
     >
       <div className="modal-window" id="modal-window">
         <div className="modal-window-header" id="modal-window-header">
@@ -73,14 +78,15 @@ export const PostModalWindow = () => {
           </button>
         </div>
         <div className="modal-window-edited-post" id="modal-window-edited-post">
-          <h3>{`${post.id}. ${capitalizeFirstLetter(post.title)}`}</h3>
+          <h3>{`${originalPost.id}. ${capitalizeFirstLetter(
+            originalPost.title,
+          )}`}</h3>
           <textarea
-            ref={textareaEditedValue}
             id="modal-window-edited-post__edited-text"
             style={{ resize: "none" }}
             cols={58}
             rows={10}
-            defaultValue={textAreaValue || post?.body}
+            defaultValue={textAreaValue || originalPost?.body}
             onChange={handleTextAreaOnChange}
           />
         </div>
