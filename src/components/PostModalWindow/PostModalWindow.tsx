@@ -33,7 +33,6 @@ export const PostModalWindow = () => {
   const handleCloseModalWindow: MouseEventHandler<
     HTMLDivElement | HTMLButtonElement
   > = (clickEvent) => {
-    console.log("clickEvent", clickEvent)
     const { id } = clickEvent.target as HTMLDivElement | HTMLButtonElement
     if (id === "modal-back" || id === "modal-window-header__close-button") {
       dispatch(setIsOpen(false))
