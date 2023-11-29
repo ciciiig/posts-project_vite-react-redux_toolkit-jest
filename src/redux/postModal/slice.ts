@@ -10,7 +10,7 @@ const initialState: PostModalState = {
 }
 
 export const postModalSlice = createSlice({
-  name: "singlePostWindow",
+  name: "postModal",
   initialState,
   reducers: {
     setClickedPostId: (state, action: PayloadAction<number>) => {
@@ -20,10 +20,10 @@ export const postModalSlice = createSlice({
       state.isOpen = action.payload
     },
     setOriginalPost: (state, action: PayloadAction<Post>) => {
-      state.originalPost = { ...action.payload }
+      state.originalPost = action.payload
     },
     setEditedPost: (state, action: PayloadAction<Post>) => {
-      state.editedPost = { ...action.payload }
+      state.editedPost = action.payload
     },
   },
 })

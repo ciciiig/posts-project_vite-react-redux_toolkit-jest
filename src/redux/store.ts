@@ -7,7 +7,7 @@ export const store = configureStore({
   reducer: {
     pagination: paginationReducer,
     posts: postsReducer,
-    singlePostWindow: postModalReducer,
+    postModal: postModalReducer,
   },
 })
 

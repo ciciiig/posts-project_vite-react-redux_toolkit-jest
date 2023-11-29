@@ -1,10 +1,10 @@
 import { postsSlice } from "./slice"
-import { PostsState, Post, UpdatedPostBody } from "./type"
+import { PostsState, Post } from "./type"
 import { selectPosts } from "./selectors"
 import {
   setCurrentPosts,
   setSearchValue,
-  updatePostBody,
+  updatePost,
   setPatchRequest,
   fetchPosts,
   patchPost,
@@ -13,14 +13,14 @@ import {
 // export reducer
 export const postsReducer = postsSlice.reducer
 // export types
-export type { PostsState, Post, UpdatedPostBody }
+export type { PostsState, Post }
 // export selectors
 export { selectPosts }
 // export actions
 export {
   setCurrentPosts,
   setSearchValue,
-  updatePostBody,
+  updatePost,
   setPatchRequest,
   fetchPosts,
   patchPost,

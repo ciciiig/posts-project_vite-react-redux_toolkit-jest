@@ -17,8 +17,3 @@ export type Post = {
   title: string
   body: string
 }
-
-export type UpdatedPostBody = {
-  id: number
-  body: string
-}

@@ -1,8 +1,7 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit"
 import config from "../../../config.json"
-import { PostModalState } from "../postModal"
-import { Post, PostsState, UpdatedPostBody } from "./type"
-import { fetchPosts, patchPost, updatePostBody } from "./actions"
+import { Post, PostsState } from "./type"
+import { fetchPosts, patchPost, updatePost } from "./"
 
 const initialState: PostsState = {
   allPosts: [],
@@ -25,13 +24,13 @@ export const postsSlice = createSlice({
     setSearchValue(state, action: PayloadAction<PostsState["searchValue"]>) {
       state.searchValue = action.payload
     },
-    updatePostBody(state, action: PayloadAction<UpdatedPostBody>) {
-      const { id, body } = action.payload
-      const existingPost = state.allPosts.find((post) => post.id === id)
+    updatePost(state, action: PayloadAction<Post>) {
+      const editedPost = action.payload
+      const existingPostId = state.allPosts.findIndex(
+        (post) => post.id === editedPost.id,
+      )
 
-      if (existingPost) {
-        existingPost.body = body
-      }
+      state.allPosts[existingPostId] = editedPost
     },
     setPatchRequest(
       state,
@@ -62,33 +61,15 @@ export const postsSlice = createSlice({
       .addCase(patchPost.pending, (state) => {
         state.status = "loading"
       })
-      .addCase(
-        patchPost.fulfilled,
-        (state, action: PayloadAction<PostModalState>) => {
-          state.status = "idle"
-          const editedPost = action.payload.editedPost
-          if (editedPost && editedPost.body !== undefined) {
-            postsSlice.actions.updatePostBody({
-              id: editedPost.id,
-              body: editedPost.body,
-            })
-          }
-        },
-      )
+      .addCase(patchPost.fulfilled, (state, action: PayloadAction<Post>) => {
+        state.status = "idle"
+
+        const editedPost = action.payload
+        updatePost(editedPost)
+      })
       .addCase(patchPost.rejected, (state, action) => {
         state.status = "failed"
         state.error = `${action.error.name}: ${action.error.message}`
-        const { id, body } = action.meta.arg.editedPost
-        const existingPost = state.allPosts.find((post) => post.id === id)
-
-        if (existingPost) {
-          existingPost.body = body
-        }
-        // TODO: dissapear Alert after 5 seconds
-        // setTimeout(() => {
-        //   state.status = "idle"
-        //   console.log(state.status)
-        // }, 2000)
       })
   },
 })

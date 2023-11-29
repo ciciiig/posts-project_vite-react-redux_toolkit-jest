@@ -6,7 +6,7 @@ import {
   setOriginalPost,
   setEditedPost,
 } from "./actions"
-import { PostModalState } from "./type"
+import { PostModalState, PostToUpdateInfo } from "./type"
 
 // export reducer
 export const postModalReducer = postModalSlice.reducer
@@ -15,4 +15,4 @@ export { selectPostModal }
 // export actions
 export { setClickedPostId, setIsOpen, setOriginalPost, setEditedPost }
 // export types
-export type { PostModalState }
+export type { PostModalState, PostToUpdateInfo }
