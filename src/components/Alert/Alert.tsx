@@ -46,7 +46,7 @@ export const Alert: FC = () => {
         ),
       })
     }
-  }, [status])
+  }, [error, status])
 
   return alertState.isShow ? (
     <div className="alert-container" id="alert-container">

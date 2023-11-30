@@ -1,7 +1,4 @@
 import "./App.css"
-import { Input } from "./components/Input/Input"
-import { Pagination } from "./components/Pagination/Pagination"
-import { PostsList } from "./components/PostsList/PostsList"
 import { PostModalWindow } from "./components/PostModalWindow/PostModalWindow"
 import { useAppSelector } from "./redux/hooks"
 import { selectPostModal } from "./redux/postModal"
