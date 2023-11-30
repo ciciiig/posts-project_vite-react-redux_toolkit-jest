@@ -7,6 +7,7 @@ import { useAppSelector } from "./redux/hooks"
 import { selectPostModal } from "./redux/postModal"
 import { Alert } from "./components/Alert/Alert"
 import { PageLoader } from "./components/PageLoader/PageLoader"
+import { Posts } from "./components/Posts/Posts"
 
 function App() {
   const { isOpen: isPostModalWindowOpen } = useAppSelector(selectPostModal)
@@ -14,13 +15,7 @@ function App() {
   return (
     <div className="app-container" id="app-container">
       {isPostModalWindowOpen && <PostModalWindow />}
-
-      <>
-        <Input />
-        <PostsList />
-        <Pagination />
-      </>
-
+      <Posts />
       <PageLoader />
       <Alert />
     </div>
