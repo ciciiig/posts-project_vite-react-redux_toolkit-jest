@@ -55,7 +55,8 @@
     ],
     "rules": {
       "prettier/prettier": "error",
-      "react/jsx-no-target-blank": "off"
+      "react/jsx-no-target-blank": "off",
+      "linebreak-style": 1
     }
   },
   "prettier": "prettier-config-nick"

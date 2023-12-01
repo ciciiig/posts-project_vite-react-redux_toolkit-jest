@@ -51,7 +51,7 @@ export const PostModalWindow = () => {
     dispatch(updatePost(editedPost))
 
     // ToDo fix type
-    posts.patchRequests[originalPost.id]?.abort()
+    // posts.patchRequests[originalPost.id]?.abort()
     const promise = dispatch(patchPost(editedPost))
     dispatch(
       setPatchRequest({

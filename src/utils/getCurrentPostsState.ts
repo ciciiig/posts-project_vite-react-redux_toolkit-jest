@@ -1,4 +1,4 @@
-import { filterPosts } from "./filterPosts.js"
+import { filterPosts } from "./filterPosts"
 import config from "../../config.json"
 import { Post, PostsState } from "../redux/posts"
 import { PaginationState } from "../redux/pagination"
