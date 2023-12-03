@@ -52,8 +52,7 @@ describe("Test <App />", () => {
 
     currentState = clone(initialState)
 
-    jest.mocked(useAppSelector).mockImplementation((fn) => fn(initialState))
-    console.log(currentState)
+    jest.mocked(useAppSelector).mockImplementation((fn) => fn(currentState))
   })
 
   it("modal window if isOpen is true", () => {
