@@ -55,7 +55,7 @@ describe("Test <App />", () => {
     jest.mocked(useAppSelector).mockImplementation((fn) => fn(currentState))
   })
 
-  it("modal window if isOpen is true", () => {
+  it("show modal window if isOpen is true", () => {
     const { container } = render(<App />)
     expect(container).toMatchSnapshot()
   })
