@@ -9,7 +9,7 @@ const initialState: PostsState = {
   status: "idle",
   error: undefined,
   currentPosts: [],
-  maxPostsPerPage: config.maxPostsPerPage,
+  maxPostsPerPage: config ? config.maxPostsPerPage : 10,
   searchValue: "",
   patchRequests: {},
 }

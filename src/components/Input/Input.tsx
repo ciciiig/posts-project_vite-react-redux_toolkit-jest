@@ -25,7 +25,7 @@ export const Input: FC = () => {
       id="search-input"
       className="search-input"
       size={40}
-      placeholder={config.searchInputPlaceholder}
+      placeholder={config ? config.searchInputPlaceholder : ""}
       onChange={handeInputSearchInput}
     />
   )
