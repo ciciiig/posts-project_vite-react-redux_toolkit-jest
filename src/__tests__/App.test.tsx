@@ -1,7 +1,6 @@
 import App from "../App"
 import { PostModalWindow } from "../components/PostModalWindow/PostModalWindow"
 import { useAppSelector } from "../redux/hooks"
-import { selectPostModal } from "../redux/postModal"
 import { Alert } from "../components/Alert/Alert"
 import { PageLoader } from "../components/PageLoader/PageLoader"
 import { Posts } from "../components/Posts/Posts"
@@ -10,10 +9,6 @@ import { render } from "@testing-library/react"
 import { RootState } from "../redux/store"
 import { clone } from "ramda"
 
-jest.mock("../App", () => ({
-  ...jest.requireActual("../App"),
-  App: jest.fn(),
-}))
 jest.mock("../components/PostModalWindow/PostModalWindow", () => ({
   ...jest.requireActual("../components/PostModalWindow/PostModalWindow"),
   PostModalWindow: jest.fn(),
@@ -21,10 +16,6 @@ jest.mock("../components/PostModalWindow/PostModalWindow", () => ({
 jest.mock("../redux/hooks", () => ({
   ...jest.requireActual("../redux/hooks"),
   useAppSelector: jest.fn(),
-}))
-jest.mock("../redux/postModal", () => ({
-  ...jest.requireActual("../redux/postModal"),
-  selectPostModal: jest.fn(),
 }))
 jest.mock("../components/Alert/Alert", () => ({
   ...jest.requireActual("../components/Alert/Alert"),
@@ -40,15 +31,15 @@ jest.mock("../components/Posts/Posts", () => ({
 }))
 
 describe("Test <App />", () => {
+  const initialState = {
+    postModal: {
+      isOpen: true,
+    },
+  } as RootState
+  let currentState: RootState
+
   beforeEach(() => {
     jest.clearAllMocks()
-
-    const initialState = {
-      postModal: {
-        isOpen: true,
-      },
-    } as RootState
-    let currentState: RootState
 
     currentState = clone(initialState)
 
