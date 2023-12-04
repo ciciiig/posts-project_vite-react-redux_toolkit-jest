@@ -1,0 +1,42 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Test <App /> Don't show modal window if isOpen is false 1`] = `
+<div>
+  <div
+    class="app-container"
+    id="app-container"
+  >
+    <div>
+      mockedPosts
+    </div>
+    <div>
+      mockedPageLoader
+    </div>
+    <div>
+      mockedAlert
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Test <App /> show modal window if isOpen is true 1`] = `
+<div>
+  <div
+    class="app-container"
+    id="app-container"
+  >
+    <div>
+      mockedPostModalWindow
+    </div>
+    <div>
+      mockedPosts
+    </div>
+    <div>
+      mockedPageLoader
+    </div>
+    <div>
+      mockedAlert
+    </div>
+  </div>
+</div>
+`;

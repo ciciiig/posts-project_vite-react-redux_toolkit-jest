@@ -44,9 +44,24 @@ describe("Test <App />", () => {
     currentState = clone(initialState)
 
     jest.mocked(useAppSelector).mockImplementation((fn) => fn(currentState))
+    jest
+      .mocked(PostModalWindow)
+      .mockImplementation(() => <div>mockedPostModalWindow</div>)
+    jest.mocked(Posts).mockImplementation(() => <div>mockedPosts</div>)
+    jest
+      .mocked(PageLoader)
+      .mockImplementation(() => <div>mockedPageLoader</div>)
+    jest.mocked(Alert).mockImplementation(() => <div>mockedAlert</div>)
   })
 
   it("show modal window if isOpen is true", () => {
+    const { container } = render(<App />)
+    expect(container).toMatchSnapshot()
+  })
+
+  it("Don't show modal window if isOpen is false", () => {
+    currentState.postModal.isOpen = false
+
     const { container } = render(<App />)
     expect(container).toMatchSnapshot()
   })
