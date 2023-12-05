@@ -5,17 +5,11 @@ import { clone } from "ramda"
 
 import { fireEvent, render, screen } from "@testing-library/react"
 import "@testing-library/jest-dom"
-// import {
-//   selectPagination,
-//   setNextPage,
-//   setPreviousPage,
-// } from "../../../redux/pagination"
 
 jest.mock("../../../redux/hooks", () => ({
   ...jest.requireActual("../../../redux/hooks"),
   useAppSelector: jest.fn(),
-  // TODO: do we need to use dispatch for testing?
-  useAppDispatch: jest.fn(),
+  useAppDispatch: () => jest.fn(),
 }))
 
 describe("Test <Pagination />", () => {
@@ -60,10 +54,14 @@ describe("Test <Pagination />", () => {
     currentState.pagination.postNavigation.isPrevBtnDisabled = false
     currentState.pagination.currentPage = 3
 
+    render(<Pagination />)
+
     const prevArrow = screen.getByRole("button", { name: /<<</i })
 
     fireEvent.click(prevArrow)
 
-    expect(currentState.pagination.currentPage).toBe(2)
+    const pageNumber = screen.getByText(2)
+
+    expect(pageNumber.textContent).toEqual("2")
   })
 })
