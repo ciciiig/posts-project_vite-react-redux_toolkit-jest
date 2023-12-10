@@ -1,0 +1,25 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Test <PageLoader /> should  not render skeletonAlertContent when skeletonStatus is idle 1`] = `<div />`;
+
+exports[`Test <PageLoader /> should render skeletonAlertContent with Error when skeletonStatus is failed 1`] = `
+<div>
+  <div
+    class="alertSkeleton-container"
+  >
+    <div>
+      Some error should occure
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Test <PageLoader /> should render skeletonAlertContent with loading when skeletonStatus is loading 1`] = `
+<div>
+  <div
+    class="alertSkeleton-container"
+  >
+    Loading...
+  </div>
+</div>
+`;

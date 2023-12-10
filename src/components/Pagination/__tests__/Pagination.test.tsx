@@ -1,10 +1,6 @@
 import { Pagination } from "../Pagination"
 import { useAppSelector, useAppDispatch } from "../../../redux/hooks"
-import {
-  // selectPagination,
-  // setNextPage,
-  setPreviousPage,
-} from "../../../redux/pagination"
+import { setPreviousPage } from "../../../redux/pagination"
 import { RootState } from "../../../redux/store"
 
 import { clone } from "ramda"
@@ -19,16 +15,13 @@ jest.mock("../../../redux/hooks", () => ({
 }))
 jest.mock("../../../redux/pagination", () => ({
   ...jest.requireActual("../../../redux/pagination"),
-  selectPagination: () => jest.fn(),
-  setNextPage: () => jest.fn(),
-  setPreviousPage: () => jest.fn(),
+  setPreviousPage: jest.fn(),
 }))
 
 describe("Test <Pagination />", () => {
   const initialState = {
     pagination: {
       currentPage: 1,
-      maxPages: 10,
       postNavigation: {
         isPrevBtnDisabled: true,
         isNextBtnDisabled: false,
@@ -36,6 +29,7 @@ describe("Test <Pagination />", () => {
     },
   } as RootState
   let currentState: RootState
+  const mockedDispatch = jest.fn()
 
   beforeEach(() => {
     jest.clearAllMocks()
@@ -43,23 +37,19 @@ describe("Test <Pagination />", () => {
     currentState = clone(initialState)
 
     jest.mocked(useAppSelector).mockImplementation((fn) => fn(currentState))
-    jest.mocked(useAppDispatch).mockImplementation((fn) => fn(currentState))
-    // jest.mocked(selectPagination).
-    // jest.mocked(setNextPage).
-    jest
-      .mocked(setPreviousPage)
-      .mockReturnValue((currentState.pagination.currentPage -= 1))
+    jest.mocked(useAppDispatch).mockReturnValue(mockedDispatch)
   })
 
-  it("when current page is 1 previous arrow button is dissabled", () => {
+  it("should disable previous arrow button when current page is 1", () => {
     render(<Pagination />)
     const prevArrow = screen.queryByText("<<<")
 
     expect(prevArrow).toBeDisabled()
   })
 
-  it("when current page is more than previous arrow button is enabled", () => {
-    useAppDispatch(setPreviousPage)
+  it("should enable previous arrow when current page is more than 1", () => {
+    currentState.pagination.postNavigation.isPrevBtnDisabled = false
+    currentState.pagination.currentPage = 2
 
     render(<Pagination />)
     const prevArrow = screen.queryByText("<<<")
@@ -67,8 +57,7 @@ describe("Test <Pagination />", () => {
     expect(prevArrow).not.toBeDisabled()
   })
 
-  // TODO: can't find a button to test it
-  it("when clicked on previous button setPreviousPage is called", () => {
+  it("should call setPreviousPage once when clicked on previous button", () => {
     currentState.pagination.postNavigation.isPrevBtnDisabled = false
     currentState.pagination.currentPage = 3
 
@@ -78,8 +67,7 @@ describe("Test <Pagination />", () => {
 
     fireEvent.click(prevArrow)
 
-    const pageNumber = screen.getByText(2)
-
-    expect(pageNumber.textContent).toBe("2")
+    expect(setPreviousPage).toHaveBeenCalledTimes(1)
+    expect(setPreviousPage).toHaveBeenCalledWith()
   })
 })
