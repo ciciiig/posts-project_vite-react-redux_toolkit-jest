@@ -8,7 +8,7 @@ exports[`Test <PageLoader /> should render skeletonAlertContent with Error when 
     class="alertSkeleton-container"
   >
     <div>
-      Some error should occure
+      Some error
     </div>
   </div>
 </div>

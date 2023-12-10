@@ -42,9 +42,10 @@ describe("Test <PageLoader />", () => {
   })
   it("should render skeletonAlertContent with Error when skeletonStatus is failed", () => {
     currentState.posts.skeletonStatus = "failed"
-    currentState.posts.error = "Some error should occure"
+    currentState.posts.error = undefined
 
     const { container } = render(<PageLoader />)
+    expect(container.textContent).toContain("Some error")
     expect(container).toMatchSnapshot()
   })
 })
