@@ -14,7 +14,6 @@ export const PageLoader: FC = () => {
   }
 
   if (postState.skeletonStatus === "failed") {
-    skeletonAlertContent = <div>{postState.error ?? "Some error"}</div>
     skeletonAlertContent = (
       <div className="alertSkeleton-container">
         <div>{postState.error ?? "Some error"}</div>
