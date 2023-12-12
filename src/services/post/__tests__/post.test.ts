@@ -1,30 +1,55 @@
+import { PatchPostArgs } from "../type"
 import { postService } from "../post"
 
 describe("Test postService", () => {
-  const data = [
+  const mockedData = [
     {
       userId: 1,
       id: 1,
-      title:
-        "sunt aut facere repellat provident occaecati excepturi optio reprehenderit",
-      body: "quia et suscipit\nsuscipit recusandae consequuntur expedita et cum\nreprehenderit molestiae ut ut quas totam\nnostrum rerum est autem sunt rem eveniet architecto",
+      title: "title",
+      body: "body",
     },
   ]
 
   beforeEach(() => {
     window.fetch = jest.fn().mockImplementation(() =>
       Promise.resolve({
-        json: () => Promise.resolve(data),
+        json: () => Promise.resolve(mockedData),
       }),
     )
   })
 
-  it("Get post fetches and returns posts", async () => {
+  it("should fetch and return posts", async () => {
     const result = await postService.getPost()
 
     expect(fetch).toHaveBeenCalledWith(
       "https://jsonplaceholder.typicode.com/posts",
     )
-    expect(result).toEqual(data)
+    expect(result).toEqual(mockedData)
+  })
+
+  it("should send patch and return updated post", async () => {
+    const mockedPost = {
+      userId: 1,
+      id: 1,
+      title: "updated title",
+      body: "updated body",
+    }
+    const mockedSignal = new AbortController().signal
+    const result = await postService.patchPost({
+      signal: mockedSignal,
+      post: mockedPost,
+    } as PatchPostArgs)
+
+    expect(result).toEqual(mockedData)
+    expect(fetch).toHaveBeenCalledWith(
+      `https://jsonplaceholder.typicode.com/posts/${mockedPost.id}`,
+      {
+        method: "PATCH",
+        body: JSON.stringify(mockedPost),
+        headers: { "Content-type": "application/json; charset=UTF-8" },
+        signal: mockedSignal,
+      },
+    )
   })
 })
