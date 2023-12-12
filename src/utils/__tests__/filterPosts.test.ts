@@ -1,6 +1,5 @@
 import { filterPosts } from "../filterPosts"
 import { Post } from "../../redux/posts"
-import { clone } from "ramda"
 
 describe("Test filterPosts function", () => {
   const mockedPosts: Post[] = [
