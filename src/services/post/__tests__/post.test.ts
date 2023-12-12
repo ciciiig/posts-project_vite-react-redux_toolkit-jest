@@ -12,7 +12,7 @@ describe("Test postService", () => {
   ]
 
   beforeEach(() => {
-    global.fetch = jest.fn(() =>
+    window.fetch = jest.fn().mockImplementation(() =>
       Promise.resolve({
         json: () => Promise.resolve(data),
       }),

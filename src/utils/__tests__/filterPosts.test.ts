@@ -2,9 +2,8 @@ import { filterPosts } from "../filterPosts"
 import { Post } from "../../redux/posts"
 import { clone } from "ramda"
 
-// TODO: writing initial state manually seems wrong. What if I need to use real api data
 describe("Test filterPosts function", () => {
-  const initialState: Post[] = [
+  const mockedPosts: Post[] = [
     {
       userId: 1,
       id: 1,
@@ -79,14 +78,9 @@ describe("Test filterPosts function", () => {
       body: "itaque id aut magnam\npraesentium quia et ea odit et ea voluptas et\nsapiente quia nihil amet occaecati quia id voluptatem\nincidunt ea est distinctio odio",
     },
   ]
-  let currentState: Post[]
 
-  beforeEach(() => {
-    currentState = clone(initialState)
-  })
-
-  it("filters posts by search value in body", () => {
-    expect(filterPosts(currentState, "dolore placeat")).toEqual([
+  it("should return correct arr of posts when search value matches in body", () => {
+    expect(filterPosts(mockedPosts, "dolore placeat")).toEqual([
       {
         userId: 1,
         id: 7,
@@ -96,8 +90,8 @@ describe("Test filterPosts function", () => {
     ])
   })
 
-  it("filters posts by search value in title", () => {
-    expect(filterPosts(currentState, "qui eum")).toEqual([
+  it("should filters posts by search value in title", () => {
+    expect(filterPosts(mockedPosts, "qui eum")).toEqual([
       {
         userId: 1,
         id: 8,
@@ -107,7 +101,7 @@ describe("Test filterPosts function", () => {
     ])
   })
 
-  it("shows empty array if seatch value is not found", () => {
-    expect(filterPosts(currentState, "asdf")).toEqual([])
+  it("shoould show empty array when search value is not found", () => {
+    expect(filterPosts(mockedPosts, "asdf")).toEqual([])
   })
 })
