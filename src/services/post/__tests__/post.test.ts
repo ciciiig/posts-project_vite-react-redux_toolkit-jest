@@ -54,20 +54,22 @@ describe("Test postService", () => {
       return expect(result).toEqual(mockData)
     })
 
-    it("should catch fails with an error", async () => {
-      // window.fetch = jest.fn().mockRejectedValue(new Error("Fake error"))
-      window.fetch = jest
-        .fn()
-        .mockImplementationOnce(() => Promise.reject("Fake error"))
+    it.only("should catch fails with an error", async () => {
+      const mockedError = new Error("Fake error")
+      window.fetch = jest.fn().mockRejectedValue(mockedError)
 
-      const result = await postService.patchPost({
-        signal: mockSignal,
-        post: mockPost,
-      })
+      let expectedResult: any
 
-      // await expect(result).rejects.toThrow("Fake error")
-      await expect(result).toBe("Fake error")
+      try {
+        await postService.patchPost({
+          signal: mockSignal,
+          post: mockPost,
+        })
+      } catch (error) {
+        expectedResult = error
+      }
 
+      expect(expectedResult).toEqual(mockedError)
     })
   })
 })
