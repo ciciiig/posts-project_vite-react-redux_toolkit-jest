@@ -2,7 +2,7 @@ import { PatchPostArgs } from "../type"
 import { postService } from "../post"
 
 describe("Test postService", () => {
-  const mockedData = [
+  const mockData = [
     {
       userId: 1,
       id: 1,
@@ -11,49 +11,58 @@ describe("Test postService", () => {
     },
   ]
 
-  beforeEach(() => {
-    window.fetch = jest.fn().mockImplementation(() =>
-      Promise.resolve({
-        json: () => Promise.resolve(mockedData),
-      }),
-    )
-  })
-
   describe("test getPost", () => {
     it("should fetch and return posts", async () => {
+      window.fetch = jest.fn().mockImplementation(() =>
+        Promise.resolve({
+          json: () => Promise.resolve(mockData),
+        }),
+      )
       const result = await postService.getPost()
 
       expect(fetch).toHaveBeenCalledWith(
         "https://jsonplaceholder.typicode.com/posts",
       )
-      expect(result).toEqual(mockedData)
+      expect(result).toEqual(mockData)
     })
   })
 
   describe("test patchPost", () => {
+    const mockPost = {
+      userId: 1,
+      id: 1,
+      title: "updated title",
+      body: "updated body",
+    }
+    const mockSignal = new AbortController().signal
+
     it("should send patch and return updated post", async () => {
-      const mockedPost = {
-        userId: 1,
-        id: 1,
-        title: "updated title",
-        body: "updated body",
-      }
-      const mockedSignal = new AbortController().signal
       const result = await postService.patchPost({
-        signal: mockedSignal,
-        post: mockedPost,
+        signal: mockSignal,
+        post: mockPost,
       } as PatchPostArgs)
 
-      expect(result).toEqual(mockedData)
       expect(fetch).toHaveBeenCalledWith(
-        `https://jsonplaceholder.typicode.com/posts/${mockedPost.id}`,
+        `https://jsonplaceholder.typicode.com/posts/${mockPost.id}`,
         {
           method: "PATCH",
-          body: JSON.stringify(mockedPost),
+          body: JSON.stringify(mockPost),
           headers: { "Content-type": "application/json; charset=UTF-8" },
-          signal: mockedSignal,
+          signal: mockSignal,
         },
       )
+      return expect(result).toEqual(mockData)
+    })
+
+    it("should catch fails with an error", async () => {
+      window.fetch = jest.fn().mockRejectedValue(new Error("Fake error"))
+
+      const result = await postService.patchPost({
+        signal: mockSignal,
+        post: mockPost,
+      })
+
+      await expect(result).rejects.toThrow("Fake error")
     })
   })
 })
