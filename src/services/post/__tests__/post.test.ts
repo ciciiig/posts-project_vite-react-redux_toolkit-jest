@@ -55,14 +55,19 @@ describe("Test postService", () => {
     })
 
     it("should catch fails with an error", async () => {
-      window.fetch = jest.fn().mockRejectedValue(new Error("Fake error"))
+      // window.fetch = jest.fn().mockRejectedValue(new Error("Fake error"))
+      window.fetch = jest
+        .fn()
+        .mockImplementationOnce(() => Promise.reject("Fake error"))
 
       const result = await postService.patchPost({
         signal: mockSignal,
         post: mockPost,
       })
 
-      await expect(result).rejects.toThrow("Fake error")
+      // await expect(result).rejects.toThrow("Fake error")
+      await expect(result).toBe("Fake error")
+
     })
   })
 })
